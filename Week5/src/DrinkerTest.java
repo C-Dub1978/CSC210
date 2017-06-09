@@ -27,6 +27,7 @@ class DrinkerTest {
 
     @org.junit.jupiter.api.Test
     void setId() {
+        d1.setId("");
     }
 
 }
