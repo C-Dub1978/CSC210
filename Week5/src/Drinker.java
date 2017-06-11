@@ -1,7 +1,13 @@
+/**
+ * Drinker class object, used for storing all the information
+ * and running calculations
+ */
+
 import com.sun.org.apache.bcel.internal.classfile.SourceFile;
 
 /**
- * Created by klown on 6/8/17.
+ * @Author Chris Wilson
+ * @Version 3.0
  */
 public class Drinker {
     private String drinkerId;
@@ -15,6 +21,9 @@ public class Drinker {
     private double metabolicRate;
     private double currentBAC;
 
+    /**
+     * Default constructor
+     */
     public Drinker() {
         drinkerId = "";
         weightInKg = 0.0D;
@@ -28,6 +37,16 @@ public class Drinker {
         currentBAC = 0.0D;
     }
 
+    /**
+     * Parameterized constructor
+     * @param lastName
+     * @param gender
+     * @param weightLbs
+     * @param heightInch
+     * @param drinksConsumed
+     * @param time
+     * @param metabolicType
+     */
     public Drinker(String lastName, char gender, int weightLbs, int heightInch,
                    int drinksConsumed, int time, char metabolicType) {
         this.gender = gender;
@@ -49,8 +68,7 @@ public class Drinker {
     public void setWeight(int lbs) {
         weightInLbs = lbs;
         final double LBS_IN_KG = 2.20462D;
-        lbs /= LBS_IN_KG;
-        weightInKg = lbs;
+        weightInKg = lbs / LBS_IN_KG;
     }
 
     /**
@@ -62,16 +80,20 @@ public class Drinker {
     public void setHeight(int height) {
         heightInInches = height;
         final double INCHES_IN_METER = 39.3701D;
-        height /= INCHES_IN_METER;
-        heightInMt = height;
+        heightInMt = height / INCHES_IN_METER;
     }
 
+    /**
+     * Setter setMetabolicRate, sets the rate based upon the gender
+     * then checks for the metabolism type
+     * @param type
+     */
     public void setMetabolicRate(char type) {
         final double MALE_METABOLIC_RATE = 0.015D;
         final double FEMALE_METABOLIC_RATE = 0.014D;
         double baseMetabolicRate;
         // ternary logic, if gender is set to 'm', use first assignment, if it's
-        // female or space character, default to female rate
+        // not, default to female
         baseMetabolicRate = gender == ('M') ? MALE_METABOLIC_RATE :
                 FEMALE_METABOLIC_RATE;
         // adjust depending on the switch parameter value
@@ -95,6 +117,11 @@ public class Drinker {
         metabolicRate = baseMetabolicRate;
     }
 
+    /**
+     * Setter setId, takes the last name and builds an ID NOT using any
+     * loops/brute force, sets the ID field
+     * @param last
+     */
     public void setId(String last) {
         final int ID_LENGTH = 7;
         final String X = "XXXXXXX";
@@ -114,7 +141,6 @@ public class Drinker {
         final int GRAMS_IN_DRINK = 14;
         double volDistrib = gender == ('m') ? calculateMenVolume() :
                 calculateWomenVolume();
-
         double convertedWeight = weightInKg * GRAMS_IN_KG;
         int totalAlcoholInDrinks = numDrinksConsumed * GRAMS_IN_DRINK;
         double initialBAC = (totalAlcoholInDrinks / (convertedWeight *
@@ -144,17 +170,23 @@ public class Drinker {
         return volDist;
     }
 
+    /**
+     * Formats the fields for glorious/gorgeous output info
+     */
     public void displayDrinkerInfo() {
         String gender = this.gender == ('M') ? "male" : "female";
         System.out.println("Calculations for: ");
-        System.out.println("\t" + gender + "drinker, id " + drinkerId);
-        System.out.println("\twho is " + heightInInches + " tall and weighs" +
-                weightInLbs + " pounds");
-        System.out.println("\tafter drinking " + numDrinksConsumed + ", in " +
-                numHoursElapsed + " hours:");
+        System.out.println("\t" + gender + " drinker, id " + drinkerId);
+        System.out.println("\twho is " + heightInInches + " inches tall " +
+                "and weighs " + weightInLbs + " pounds");
+        System.out.println("\tafter drinking " + numDrinksConsumed +
+                " drinks, " + "in " + numHoursElapsed + " hours:");
         System.out.printf("Current BAC is approximately %.3f\n", currentBAC);
     }
 
+    /**
+     * Method to check the current BAC and output info the the user
+     */
     public void analyzeBAC() {
         System.out.println();
         final double IMPAIRMENT = 0.02D;
@@ -167,12 +199,11 @@ public class Drinker {
                     "\nas you may be partially impaired\n");
         } else if (currentBAC >= COMMERCIAL && currentBAC < ALL) {
             System.out.printf("You may NOT legally drive any commercial" +
-                    "vehicle because you have exceeded\n the legal commercial limit"
-
-                    + " of %.3f\n", COMMERCIAL);
+                    "vehicle because you have exceeded\n the legal commercial" +
+                    " limit" + " of %.3f\n", COMMERCIAL);
         } else {
             System.out.printf("You may not legally drive ANY vehicle," +
-                    "because you have exceeded\n the legal limit of %.3f\n", ALL);
+                  "because you have exceeded\n the legal limit of %.3f\n", ALL);
             double futureBAC = currentBAC - metabolicRate;
             if (futureBAC >= ALL) {
                 System.out.println("Even waiting an hour will not help, " +
@@ -184,4 +215,26 @@ public class Drinker {
             }
         }
     }
+
+    /**
+     * Setter (unused), set number of drinks
+     * @param drinks
+     */
+    public void setNumDrinksConsumed(int drinks) {
+        if(drinks > 0) {
+            numDrinksConsumed = drinks;
+        }
+    }
+
+    /**
+     * Setter (unused), set hours since last drink
+     * @param hours
+     */
+    public void setNumHoursElapsed(int hours) {
+        if(hours > 0) {
+            numHoursElapsed = hours;
+        }
+    }
+
+
 }

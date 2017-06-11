@@ -1,11 +1,18 @@
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-
+/**
+ * Main application entry, collects input from user, builds the Drinker object,
+ * and calls it to calculate
+ */
 import java.util.Scanner;
 
 /**
- * Created by klown on 6/8/17.
+ * @Author Chris Wilson
+ * @Version 3.0
  */
 public class BACCalculator {
+    /**
+     * Main method
+     * @param args, the command line arguments
+     */
     public static void main(String[] args) {
         describeProgram();
         Scanner scanner = new Scanner(System.in);
@@ -60,6 +67,7 @@ public class BACCalculator {
 
         Drinker drinker = new Drinker(last, genderChar, weight, height, drinks, hours, metabolic);
         drinker.calculateCurrentBAC();
+        drinker.displayDrinkerInfo();
         drinker.analyzeBAC();
     }
 
