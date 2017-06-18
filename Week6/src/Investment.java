@@ -13,9 +13,9 @@ public class Investment {
         this.initialInvestment = initialInvestment;
         this.apr = apr;
         this.term = term;
-        compoundType = type;
-        balance = this.initialInvestment;
+        balance = initialInvestment;
         earnings = 0.0D;
+        compoundType = type;
     }
 
     public double getEarnings() {
@@ -39,37 +39,34 @@ public class Investment {
     }
 
     public void calculateResults() {
-        final double convertedAPR = apr * .01;
-        System.out.println("converted apr: " + convertedAPR);
-        int earningCycle;
-        double interestEarned = 0;
-        if(compoundType == 'a' || compoundType == 'A') {
-            earningCycle = 1;
-        } else if(compoundType == 'q' || compoundType == 'Q') {
-            earningCycle = 4;
-        } else if(compoundType == 'm' || compoundType == 'M') {
-            earningCycle = 12;
-        } else if(compoundType == 'd' || compoundType == 'D') {
-            earningCycle = 365;
-        } else {
-            earningCycle = 1;
+        double convertedAPR = apr * .01;
+        int occurence = 0;
+        if(compoundType == 'A') {
+            occurence = term * 1;
+        } else if(compoundType == 'Q') {
+            occurence = term * 4;
+            convertedAPR /= 4;
+        } else if(compoundType == 'M') {
+            occurence = term * 12;
+            convertedAPR /= 12;
+        } else if(compoundType == 'D') {
+            occurence = term * 365;
+            convertedAPR /= 365;
         }
-
-        for(int i = 0; i < earningCycle; i++) {
-            double interest = initialInvestment * convertedAPR;
-            interestEarned += interest;
+        for(int i = 0; i < occurence; i++) {
+            double amount = balance * convertedAPR;
+            balance += amount;
         }
-        earnings = interestEarned * term;
-        balance = initialInvestment + earnings;
+        earnings = balance - initialInvestment;
     }
 
     public void displayResults() {
         System.out.println("Results for annual compounding: ");
         System.out.printf("\tFor an initial investment of $ " +
-                "%.2f", initialInvestment);
+                "%,.2f", initialInvestment);
         System.out.printf("\n\tafter " + term + " years at %.3f%%", apr );
-        System.out.printf("\n\tthe ending balance is $ %.2f", balance);
-        System.out.printf("\n\tfor earnings of $ %.2f", earnings);
+        System.out.printf("\n\tthe ending balance is $ %,.2f", balance);
+        System.out.printf("\n\tfor earnings of $ %,.2f", earnings);
     }
 
 
