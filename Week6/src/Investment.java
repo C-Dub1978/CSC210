@@ -61,13 +61,23 @@ public class Investment {
     }
 
     public void displayResults() {
+//        System.out.println("Results for " + convertCompoundingTypeToString() +
+//                " compounding: ");
+//        System.out.printf("\tFor an initial investment of $ " +
+//                "%,.2f", initialInvestment);
+//        System.out.printf("\n\tafter " + term + " years at %.3f%%", apr );
+//        System.out.printf("\n\tthe ending balance is $ %,.2f", balance);
+//        System.out.printf("\n\tfor earnings of $ %,.2f", earnings);
+//        System.out.println();
         System.out.println("Results for " + convertCompoundingTypeToString() +
-                " compounding: ");
-        System.out.printf("\tFor an initial investment of $ " +
-                "%,.2f", initialInvestment);
-        System.out.printf("\n\tafter " + term + " years at %.3f%%", apr );
-        System.out.printf("\n\tthe ending balance is $ %,.2f", balance);
-        System.out.printf("\n\tfor earnings of $ %,.2f", earnings);
-        System.out.println();
+            " compounding: ");
+        System.out.printf("\t%-30s $ %,.2f\n", "For an initial investment of: ",
+                initialInvestment);
+        System.out.printf("\t%-30s %.3f %%\n", "after" + term + " years at: ",
+                apr, "%");
+        System.out.printf("\t%-30s $ %,.2f\n", "The ending balance is: ",
+                balance);
+        System.out.printf("\t%-30s $ %,.2f\n", "For earnings of: ",
+                earnings);
     }
 }
