@@ -1,5 +1,10 @@
 /**
- * Created by klown on 6/11/17.
+ * Investment class, calculates compound investments
+ */
+
+/**
+ * @Author Chris Wilson
+ * @Version 1.0
  */
 public class Investment {
     private double initialInvestment;
@@ -9,7 +14,15 @@ public class Investment {
     private double balance;
     private double earnings;
 
-    public Investment(double initialInvestment, double apr, int term, char type) {
+    /**
+     * Parameterized constructor
+     * @param initialInvestment, beginning balance
+     * @param apr, percentage rate
+     * @param term, amount in years
+     * @param type, designator for compounding
+     */
+    public Investment(double initialInvestment, double apr, int term,
+                      char type) {
         this.initialInvestment = initialInvestment;
         this.apr = apr;
         this.term = term;
@@ -18,10 +31,18 @@ public class Investment {
         compoundType = type;
     }
 
+    /**
+     * Getter, gets the earnings
+     * @return
+     */
     public double getEarnings() {
         return earnings;
     }
 
+    /**
+     * method to return a string letter for compound type
+     * @return
+     */
     public String convertCompoundingTypeToString() {
         String type;
         if(compoundType == 'A') {
@@ -38,6 +59,9 @@ public class Investment {
         return type;
     }
 
+    /**
+     * Calculates earnings with a for loop
+     */
     public void calculateResults() {
         double convertedAPR = apr * .01;
         int occurence = 0;
@@ -60,15 +84,10 @@ public class Investment {
         earnings = balance - initialInvestment;
     }
 
+    /**
+     * Prints out all results formatted nicely
+     */
     public void displayResults() {
-//        System.out.println("Results for " + convertCompoundingTypeToString() +
-//                " compounding: ");
-//        System.out.printf("\tFor an initial investment of $ " +
-//                "%,.2f", initialInvestment);
-//        System.out.printf("\n\tafter " + term + " years at %.3f%%", apr );
-//        System.out.printf("\n\tthe ending balance is $ %,.2f", balance);
-//        System.out.printf("\n\tfor earnings of $ %,.2f", earnings);
-//        System.out.println();
         System.out.println("Results for " + convertCompoundingTypeToString() +
             " compounding: ");
         System.out.printf("\t%-30s $ %,.2f\n", "For an initial investment of: ",

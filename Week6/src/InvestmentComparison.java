@@ -1,8 +1,19 @@
+/**
+ * Main class, used to build an investment object after user input
+ */
 import java.util.Scanner;
 
+/**
+ * @Author Chris Wilson
+ * @Version 1.0
+ */
 public class InvestmentComparison {
     private static final int MINIMUM_VALUE = 1;
 
+    /**
+     * Main method
+     * @param args, the command line arguments
+     */
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         Investment investmentAnnual;
@@ -17,18 +28,22 @@ public class InvestmentComparison {
             time = getTermFromUser();
 
             investmentAnnual = new Investment(initial, rate, time, 'A');
-            investmentOther = new Investment(initial, rate, time, compoundChoice);
+            investmentOther = new Investment(initial, rate, time,
+                    compoundChoice);
             investmentAnnual.calculateResults();
             investmentOther.calculateResults();
             investmentAnnual.displayResults();
             System.out.println();
             investmentOther.displayResults();
-            double difference = investmentOther.getEarnings() - investmentAnnual.getEarnings();
-            String compoundingType = investmentOther.convertCompoundingTypeToString();
+            double difference = investmentOther.getEarnings() -
+                    investmentAnnual.getEarnings();
+            String compoundingType =
+                    investmentOther.convertCompoundingTypeToString();
             System.out.println();
             System.out.println("Compounding Analysis: ");
             System.out.printf("\tYou earn $ %,.2f", difference);
-            System.out.print(" more with " + compoundingType + " compounding\n");
+            System.out.print(" more with " + compoundingType +
+                    " compounding\n");
             System.out.print("\tvs. Annual compounding");
             System.out.println();
             System.out.println();
@@ -40,6 +55,10 @@ public class InvestmentComparison {
         }
     }
 
+    /**
+     * Gets initial investment from the user
+     * @return investment, the initial investment amount
+     */
     public static double getInitialInvestmentFromUser() {
         final int MAXIMUM = 500000;
         Scanner input = new Scanner(System.in);
@@ -61,6 +80,10 @@ public class InvestmentComparison {
         return investment;
     }
 
+    /**
+     * Gets the apr from user input
+     * @return apr, the percentage rate
+     */
     public static double getPercentageRateFromUser() {
         final double MAXIMUM = 30.0D;
         Scanner input = new Scanner(System.in);
@@ -82,6 +105,10 @@ public class InvestmentComparison {
         return apr;
     }
 
+    /**
+     * Gets the term (in years) from user input
+     * @return term, amount in years
+     */
     public static int getTermFromUser() {
         final double MAXIMUM = 75;
         Scanner input = new Scanner(System.in);
@@ -103,6 +130,10 @@ public class InvestmentComparison {
         return term;
     }
 
+    /**
+     * Gets the compounding type from user input
+     * @return choice, the character representation of compound type
+     */
     public static char getCompoundFromUser() {
         Scanner input = new Scanner(System.in);
         char choice;
