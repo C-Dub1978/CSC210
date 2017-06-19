@@ -4,15 +4,40 @@ public class InvestmentComparison {
     private static final int MINIMUM_VALUE = 1;
 
     public static void main(String[] args) {
-//        Scanner input = new Scanner(System.in);
-//        String choice;
-//        do {
-//            System.out.println("Compare Annual Compounding to: ");
-//            System.out.println("\tQ - Quarterly Compounding");
-//        } while()
-        Investment invest = new Investment(1, 30,75,'M');
-        invest.calculateResults();
-        invest.displayResults();
+        Scanner input = new Scanner(System.in);
+        Investment investmentAnnual;
+        Investment investmentOther;
+        char compoundChoice = getCompoundFromUser();
+        double initial;
+        double rate;
+        int time;
+        while(compoundChoice != 'E') {
+            initial = getInitialInvestmentFromUser();
+            rate = getPercentageRateFromUser();
+            time = getTermFromUser();
+
+            investmentAnnual = new Investment(initial, rate, time, 'A');
+            investmentOther = new Investment(initial, rate, time, compoundChoice);
+            investmentAnnual.calculateResults();
+            investmentOther.calculateResults();
+            investmentAnnual.displayResults();
+            System.out.println();
+            investmentOther.displayResults();
+            double difference = investmentOther.getEarnings() - investmentAnnual.getEarnings();
+            String compoundingType = investmentOther.convertCompoundingTypeToString();
+            System.out.println();
+            System.out.println("Compounding Analysis: ");
+            System.out.printf("\tYou earn $ %,.2f", difference);
+            System.out.print(" more with " + compoundingType + " compounding\n");
+            System.out.print("\tvs. Annual compounding");
+            System.out.println();
+            System.out.println();
+            compoundChoice = getCompoundFromUser();
+        }
+        if(compoundChoice == 'E') {
+            System.out.println("Bye bye!!");
+            System.exit(0);
+        }
     }
 
     public static double getInitialInvestmentFromUser() {
@@ -44,7 +69,7 @@ public class InvestmentComparison {
             System.out.println("Please enter a percentage rate greater than" +
                     " 1, maximum of " + MAXIMUM + ":");
             while(!input.hasNextDouble()) {
-                System.out.println("Error, invalid input. Please enter a" +
+                System.out.println("Error, invalid input. Please enter a " +
                         "percentage rate greater than 1, maximum of " +
                         MAXIMUM + ":");
                 input.next();
@@ -79,7 +104,24 @@ public class InvestmentComparison {
     }
 
     public static char getCompoundFromUser() {
-       return 'c';
+        Scanner input = new Scanner(System.in);
+        char choice;
+        do {
+            System.out.println("Compare Annual Compounding to:");
+            System.out.println("\tQ - Quarterly Compounding");
+            System.out.println("\tM - Monthly Compounding");
+            System.out.println("\tD - Daily Compounding");
+            System.out.println("\tE - Exit Program");
+            System.out.println("Enter choice from menu above: ");
+            choice = input.next().toUpperCase().charAt(0);
+            if(choice != 'Q' && choice != 'M' &&
+                    choice != 'D' && choice != 'E') {
+                System.out.println("Error, invalid choice");
+            }
+        } while(choice != 'Q' && choice != 'M' &&
+                    choice != 'D' && choice != 'E');
+
+        return choice;
     }
 }
 

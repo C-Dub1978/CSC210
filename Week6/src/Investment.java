@@ -24,13 +24,13 @@ public class Investment {
 
     public String convertCompoundingTypeToString() {
         String type;
-        if(compoundType == 'a' || compoundType == 'A') {
+        if(compoundType == 'A') {
             type = "Annual";
-        } else if(compoundType == 'q' || compoundType == 'Q') {
+        } else if(compoundType == 'Q') {
             type = "Quarterly";
-        } else if(compoundType == 'm' || compoundType == 'M') {
+        } else if(compoundType == 'M') {
             type = "Monthly";
-        } else if(compoundType == 'd' || compoundType == 'D') {
+        } else if(compoundType == 'D') {
             type = "Daily";
         } else {
             type = "Daily";
@@ -61,18 +61,13 @@ public class Investment {
     }
 
     public void displayResults() {
-        System.out.println("Results for annual compounding: ");
+        System.out.println("Results for " + convertCompoundingTypeToString() +
+                " compounding: ");
         System.out.printf("\tFor an initial investment of $ " +
                 "%,.2f", initialInvestment);
         System.out.printf("\n\tafter " + term + " years at %.3f%%", apr );
         System.out.printf("\n\tthe ending balance is $ %,.2f", balance);
         System.out.printf("\n\tfor earnings of $ %,.2f", earnings);
-    }
-
-
-
-    // TEST GETTERS/SETTERS, DELETE AFTER TESTING
-    public double getBalance() {
-        return balance;
+        System.out.println();
     }
 }
