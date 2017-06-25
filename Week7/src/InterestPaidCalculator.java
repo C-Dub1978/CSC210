@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -9,7 +10,7 @@ import java.util.Scanner;
 public class InterestPaidCalculator {
 
     public static void main(String[] args) {
-        final File outputFileName = new File("report.txt");
+        final String outputFileName = "report.txt";
         String inputTextFileName;
         File inputFile = null;
         Scanner inputScanner = null;
@@ -29,18 +30,40 @@ public class InterestPaidCalculator {
         inputTextFileName = keyboardReader.next();
         System.out.println("filename: " + inputTextFileName);
         System.out.println();
-        System.out.println("Reading file and calculating interest.....");
 
         try {
             inputFile = new File(inputTextFileName);
-            //System.err.println(inputFile.getAbsolutePath());
-            inputScanner = new Scanner(inputFile);
-            while(inputScanner.hasNextLine()) {
-                System.out.println(inputScanner.nextLine());
-            }
-
+            inputScanner = new Scanner(inputFile).useDelimiter(" ");
+            canOpenInputFile = true;
+        } catch(FileNotFoundException e) {
+            System.out.println("error opening input file");
+        }
+        try {
+            outputFile = new File(outputFileName);
+            printWriter = new PrintWriter(outputFile);
+            canOpenOutputFile = true;
         } catch(Exception e) {
-            System.out.println("error");
+            System.out.println("error opening output file");
+        }
+
+        if(canOpenInputFile && canOpenOutputFile) {
+            // start logic for reading the file input and building investment objects
+            while(inputScanner.hasNextLine()) {
+                int account = inputScanner.nextInt();
+                double invest = inputScanner.nextDouble();
+                double apr = inputScanner.nextDouble();
+                char type = inputScanner.next().charAt(0);
+                try {
+                    Investment inv = new Investment(invest, apr, type, account);
+                    inv.calculateResults();
+                    inv.displayResults();
+                } catch(IllegalArgumentException e) {
+                    System.out.println(e);
+                }
+                inputScanner.nextLine();
+            }
+            inputScanner.close();
+            printWriter.close();
         }
     }
 }

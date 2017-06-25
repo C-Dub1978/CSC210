@@ -22,17 +22,35 @@ public class Investment {
      * @param type, designator for compounding
      */
     public Investment(double initialInvestment, double apr, char type,
-                      int accountNum) {
+                      int accountNum) throws IllegalArgumentException {
         final int MAX_BEGINNING_BALANCE = 500000;
         final int MIN_BEGINNING_BALANCE = 1;
         final double MAX_APR = 30.0D;
         final double MIN_APR = 1.0D;
-        beginningBalance = initialInvestment;
-        this.apr = apr;
-        endingBalance = initialInvestment;
+        if(initialInvestment < MIN_BEGINNING_BALANCE) {
+            throw new IllegalArgumentException("Error, investment amount too small");
+        } else if(initialInvestment > MAX_BEGINNING_BALANCE) {
+            throw new IllegalArgumentException("Error, investment amount too large");
+        } else {
+            beginningBalance = initialInvestment;
+            endingBalance = initialInvestment;
+        }
+        if(apr < MIN_APR) {
+            throw new IllegalArgumentException("Error, percentage rate too small");
+        } else if(apr > MAX_APR) {
+            throw new IllegalArgumentException("Error, percentage rate too large");
+        }
+        else {
+            this.apr = apr;
+        }
+        if(type != 'A' && type != 'Q' && type != 'M' && type != 'D') {
+            throw new IllegalArgumentException("Error, compound type invalid");
+        } else {
+            compoundType = type;
+        }
         earnings = 0.0D;
-        compoundType = type;
         accountNumber = accountNum;
+        term = 1;
     }
 
     /**
