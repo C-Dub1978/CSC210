@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -33,7 +34,7 @@ public class InterestPaidCalculator {
 
         try {
             inputFile = new File(inputTextFileName);
-            inputScanner = new Scanner(inputFile).useDelimiter(" ");
+            inputScanner = new Scanner(inputFile);
             canOpenInputFile = true;
         } catch(FileNotFoundException e) {
             System.out.println("error opening input file");
@@ -47,23 +48,35 @@ public class InterestPaidCalculator {
         }
 
         if(canOpenInputFile && canOpenOutputFile) {
-            // start logic for reading the file input and building investment objects
             while(inputScanner.hasNextLine()) {
-                int account = inputScanner.nextInt();
-                double invest = inputScanner.nextDouble();
-                double apr = inputScanner.nextDouble();
-                char type = inputScanner.next().charAt(0);
-                try {
-                    Investment inv = new Investment(invest, apr, type, account);
-                    inv.calculateResults();
-                    inv.displayResults();
-                } catch(IllegalArgumentException e) {
-                    System.out.println(e);
-                }
-                inputScanner.nextLine();
+                    String inputLine = inputScanner.nextLine();
+                    String[] tokens = inputLine.split("\\s+");
+                    if(tokens.length == 4) {
+                        int account = Integer.parseInt(tokens[0]);
+                        double invest = Double.parseDouble(tokens[1]);
+                        double apr = Double.parseDouble(tokens[2]);
+                        char type = tokens[3].charAt(0);
+                        try {
+                            Investment inv = new Investment(invest, apr, type, account);
+                            inv.calculateResults();
+                            totalInterestPaidAnnual += inv.getEarnings();
+                            printWriter.println(account + " " + inv.getEarnings() + "\n");
+                            numAccountsProcessed++;
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("input error");
+                        }
+
+
+                    } else {
+                        printWriter.println("Invalid data line, " + inputLine + " ignored\n");
+                    }
+
+
             }
             inputScanner.close();
             printWriter.close();
+
+            System.out.println("For " + numAccountsProcessed + " accounts processed, the company paid " + totalInterestPaidAnnual);
         }
     }
 }
