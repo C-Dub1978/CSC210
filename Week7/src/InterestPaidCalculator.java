@@ -1,15 +1,28 @@
+/**
+ * This program will read input from a text file,
+ * parse the information and attempt to calculate
+ * interest paid to all valid lines in the accounting
+ * document
+ */
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * Created by klown on 6/21/17.
+ * @Author Chris Wilson
+ * @Version 1.0
  */
 public class InterestPaidCalculator {
-
+    /**
+     * Main method, attempts to open 2 different files, one input
+     * and one output, and parse information. Once input information
+     * is valid, it will create investment objects checking to
+     * see if the input arguments are valid.
+     * @param args, the command line arguments
+     */
     public static void main(String[] args) {
         final String outputFileName = "report.txt";
         String inputTextFileName;
@@ -43,40 +56,42 @@ public class InterestPaidCalculator {
             outputFile = new File(outputFileName);
             printWriter = new PrintWriter(outputFile);
             canOpenOutputFile = true;
-        } catch(Exception e) {
+        } catch(IOException e) {
             System.out.println("error opening output file");
         }
 
         if(canOpenInputFile && canOpenOutputFile) {
             while(inputScanner.hasNextLine()) {
-                    String inputLine = inputScanner.nextLine();
-                    String[] tokens = inputLine.split("\\s+");
-                    if(tokens.length == 4) {
-                        int account = Integer.parseInt(tokens[0]);
-                        double invest = Double.parseDouble(tokens[1]);
-                        double apr = Double.parseDouble(tokens[2]);
-                        char type = tokens[3].charAt(0);
-                        try {
-                            Investment inv = new Investment(invest, apr, type, account);
-                            inv.calculateResults();
-                            totalInterestPaidAnnual += inv.getEarnings();
-                            printWriter.println(account + " " + inv.getEarnings() + "\n");
-                            numAccountsProcessed++;
-                        } catch (IllegalArgumentException e) {
-                            System.out.println("input error");
-                        }
-
-
-                    } else {
-                        printWriter.println("Invalid data line, " + inputLine + " ignored\n");
+                String inputLine = inputScanner.nextLine();
+                String[] tokens = inputLine.split("\\s+");
+                if(tokens.length == 4) {
+                    int account = Integer.parseInt(tokens[0]);
+                    double invest = Double.parseDouble(tokens[1]);
+                    double apr = Double.parseDouble(tokens[2]);
+                    char type = tokens[3].charAt(0);
+                    try {
+                        Investment inv = new Investment(invest, apr, type, account);
+                        inv.calculateResults();
+                        totalInterestPaidAnnual += inv.getEarnings();
+                        printWriter.printf(account + " %.2f\n", inv.getEarnings());
+                        numAccountsProcessed++;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("*****Invalid data line, " + inputLine + " ignored\n");
                     }
 
 
+                } else {
+                    System.out.println("*****Invalid data line, " + inputLine + " ignored\n");
+                }
             }
             inputScanner.close();
             printWriter.close();
-
-            System.out.println("For " + numAccountsProcessed + " accounts processed, the company paid " + totalInterestPaidAnnual);
+            System.out.println("Results:");
+            System.out.printf("\tFor " + numAccountsProcessed + " accounts processed, the company paid\n"
+                    + "\t$%.2f total interest", totalInterestPaidAnnual);
+        } else {
+            System.out.println("File I/O error, exiting...");
         }
     }
 }

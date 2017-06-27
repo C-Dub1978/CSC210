@@ -4,7 +4,7 @@
 
 /**
  * @Author Chris Wilson
- * @Version 1.0
+ * @Version 2.0
  */
 public class Investment {
     private double beginningBalance;
@@ -17,9 +17,9 @@ public class Investment {
 
     /**
      * Parameterized constructor
-     * @param initialInvestment, beginning balance
-     * @param apr, percentage rate
-     * @param type, designator for compounding
+     * @param initialInvestment, the beginning balance
+     * @param apr, the percentage rate
+     * @param type, the designator for compounding
      */
     public Investment(double initialInvestment, double apr, char type,
                       int accountNum) throws IllegalArgumentException {
